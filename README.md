@@ -41,6 +41,24 @@ and maintainable healthcare application.
   - Email is enforced to be unique via `@Column(unique = true)`
 - Robust validation error messages with meaningful business logic exceptions
 
+
+## 📄 API Documentation (Swagger)
+
+The complete API documentation is available in the Swagger YAML file:
+
+➡️ [View Swagger.yaml](./Docs/Swagger.yaml)
+
+You can open it in the [Swagger Editor](https://editor.swagger.io/) to explore and test the API.
+
+```yaml
+# Sample content from Swagger.yaml
+openapi: 3.1.0
+info:
+  title: Patient Management API
+  version: 1.0.0
+
+
+
 ## Learning Outcomes (To This Stage)
 
 - Designed and implemented real-world layered architecture in a healthcare context
