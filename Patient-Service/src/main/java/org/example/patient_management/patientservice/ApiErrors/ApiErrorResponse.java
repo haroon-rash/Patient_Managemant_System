@@ -16,9 +16,5 @@ public class ApiErrorResponse {
         this.timestamp = LocalDate.now();
     }
 
-    public ApiErrorResponse(int errorCode, String errorMessage, LocalDate timestamp) {
-        this.errorCode = errorCode;
-        this.errorMessage = errorMessage;
-        this.timestamp = timestamp;
-    }
+   
 }
