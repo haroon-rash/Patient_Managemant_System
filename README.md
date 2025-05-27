@@ -1,6 +1,6 @@
-# Hospital Management Microservices System (In Progress)
+# Patient Management Microservices System (In Progress)
 
-This project is a professional, real-world microservices-based Hospital Management System built using Spring Boot. 
+This project is a professional, real-world microservices-based Patient Management System built using Spring Boot. 
 Currently focused on the core backend architecture for the **Patient Service**,
 this implementation lays the foundation for a scalable, secure, 
 and maintainable healthcare application.
