@@ -48,7 +48,7 @@ The complete API documentation is available in the Swagger YAML file:
 
 ➡️ [View Swagger.yaml](./Docs/Swagger.yaml)
 
-You can open it in the [Swagger Editor]([https://editor.swagger.io/](https://editor.swagger.io/)) to explore and test the API.
+You can open it in the [Swagger Editor](https://editor.swagger.io/) to explore and test the API.
 
 
 
