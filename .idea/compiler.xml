@@ -12,6 +12,12 @@
         </processorPath>
         <module name="Patient-Service" />
       </profile>
+      <profile name="Maven default annotation processors profile" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <module name="Billing-Srvice" />
+      </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
       <module name="Patient_Services" target="17" />
@@ -19,6 +25,7 @@
   </component>
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
+      <module name="Billing-Srvice" options="-parameters" />
       <module name="Patient-Service" options="-parameters" />
       <module name="Patient_Services" options="-parameters" />
     </option>
