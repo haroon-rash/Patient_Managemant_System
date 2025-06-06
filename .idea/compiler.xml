@@ -9,6 +9,7 @@
         <outputRelativeToContentRoot value="true" />
         <processorPath useClasspath="false">
           <entry name="$MAVEN_REPOSITORY$/org/projectlombok/lombok/1.18.38/lombok-1.18.38.jar" />
+          <entry name="$MAVEN_REPOSITORY$/org/projectlombok/lombok/1.18.38/lombok-1.18.38.jar" />
         </processorPath>
         <module name="Patient-Service" />
       </profile>
@@ -16,16 +17,18 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
-        <module name="Billing-Srvice" />
+        <module name="Billing-Services" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
+      <module name="Billing-Service" target="17" />
       <module name="Patient_Services" target="17" />
     </bytecodeTargetLevel>
   </component>
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
-      <module name="Billing-Srvice" options="-parameters" />
+      <module name="Billing-Service" options="-parameters" />
+      <module name="Billing-Services" options="-parameters" />
       <module name="Patient-Service" options="-parameters" />
       <module name="Patient_Services" options="-parameters" />
     </option>
