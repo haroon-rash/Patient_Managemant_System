@@ -5,6 +5,7 @@ import org.example.patient_management.patientservice.DTO.PatientRequestDTO;
 import org.example.patient_management.patientservice.DTO.PatientResponseDTO;
 import org.example.patient_management.patientservice.Exception.EmailAlreadyExitException;
 import org.example.patient_management.patientservice.Exception.PatientNotFoundException;
+import org.example.patient_management.patientservice.Grpc.BillingServiceGrpcClient;
 import org.example.patient_management.patientservice.Models.Patient;
 import org.example.patient_management.patientservice.Repository.PatientRepository;
 import org.example.patient_management.patientservice.mapper.PatientMapper;
@@ -18,10 +19,12 @@ import java.util.List;
 public class PatientService {
 
     private PatientRepository patientRepository;
+    private final BillingServiceGrpcClient billingServiceGrpcClient;
 
-    public PatientService(PatientRepository patientRepository) {
+    public PatientService(PatientRepository patientRepository, BillingServiceGrpcClient billingServiceGrpcClient) {
+
         this.patientRepository = patientRepository;
-
+this.billingServiceGrpcClient = billingServiceGrpcClient;
     }
 
 
@@ -45,6 +48,10 @@ public class PatientService {
         }
 
         Patient newPatient = patientRepository.save(PatientMapper.mapToPatient(patientRequestDTO));
+
+
+billingServiceGrpcClient.createBillingAccount(newPatient.getId().toString(),newPatient.getName(),newPatient.getEmail());
+
         return PatientMapper.mapToPatientResponseDTO(newPatient);
     }
 
