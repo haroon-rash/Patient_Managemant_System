@@ -1,41 +1,48 @@
 package org.example.patient_management.patientservice.mapper;
 
-
 import org.example.patient_management.patientservice.DTO.PatientRequestDTO;
 import org.example.patient_management.patientservice.DTO.PatientResponseDTO;
 import org.example.patient_management.patientservice.Models.Patient;
 
 import java.time.LocalDate;
+import java.time.format.DateTimeParseException;
 
 public class PatientMapper {
 
-    //Map patient  to patient Response DTO object
-
-    //converts patient to patientResponseDTo
+    // Map Patient -> PatientResponseDTO
     public static PatientResponseDTO mapToPatientResponseDTO(Patient patient) {
-        PatientResponseDTO patientDTO = new PatientResponseDTO();
-        patientDTO.setId(patient.getId().toString());
-        patientDTO.setName(patient.getName());
-        patientDTO.setEmail(patient.getEmail());
-        patientDTO.setAddress(patient.getAddress());
-        patientDTO.setPhone(patient.getPhone());
-        patientDTO.setDateOfBirth(patient.getDateOfBirth().toString());
-        patientDTO.setRegisteredDate(patient.getRegisteredDate().toString());
-
-        return patientDTO;
+        PatientResponseDTO dto = new PatientResponseDTO();
+        dto.setId(patient.getId().toString());
+        dto.setName(patient.getName());
+        dto.setEmail(patient.getEmail());
+        dto.setAddress(patient.getAddress());
+        dto.setPhone(patient.getPhone());
+        dto.setDateOfBirth(patient.getDateOfBirth().toString());
+        dto.setRegisteredDate(patient.getRegisteredDate().toString());
+        return dto;
     }
 
-    //convert PatientRequestDTo to Patient
-public static Patient mapToPatient(PatientRequestDTO patientRequestDTO){
-    Patient patient = new Patient();
-    patient.setName(patientRequestDTO.getName());
-    patient.setEmail(patientRequestDTO.getEmail());
-    patient.setAddress(patientRequestDTO.getAddress());
-    patient.setPhone(patientRequestDTO.getPhone());
-    patient.setDateOfBirth(LocalDate.parse(patientRequestDTO.getDateOfBirth()));
-    patient.setRegisteredDate(LocalDate.parse(patientRequestDTO.getRegisteredDate()));
+    // Map PatientRequestDTO -> Patient
+    public static Patient mapToPatient(PatientRequestDTO requestDTO) {
+        Patient patient = new Patient();
+        patient.setName(requestDTO.getName());
+        patient.setEmail(requestDTO.getEmail());
+        patient.setAddress(requestDTO.getAddress());
+        patient.setPhone(requestDTO.getPhone());
+
+        // Safe Date Parsing with error handling
+        try {
+            patient.setDateOfBirth(LocalDate.parse(requestDTO.getDateOfBirth())); // Format: yyyy-MM-dd
+        } catch (DateTimeParseException e) {
+            throw new IllegalArgumentException("Invalid format for dateOfBirth: " + requestDTO.getDateOfBirth());
+        }
+
+        try {
+            patient.setRegisteredDate(LocalDate.parse(requestDTO.getRegisteredDate())); // Format: yyyy-MM-dd
+        } catch (DateTimeParseException e) {
+            throw new IllegalArgumentException("Invalid format for registeredDate: " + requestDTO.getRegisteredDate());
+        }
+
         return patient;
-}
-
-
+    }
 }

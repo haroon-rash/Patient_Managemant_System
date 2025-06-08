@@ -9,14 +9,34 @@ import org.example.patient_management.patientservice.Grpc.BillingServiceGrpcClie
 import org.example.patient_management.patientservice.Models.Patient;
 import org.example.patient_management.patientservice.Repository.PatientRepository;
 import org.example.patient_management.patientservice.mapper.PatientMapper;
+
+import java.time.format.DateTimeParseException;
 import java.util.UUID;
+
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.time.LocalDate;
 import java.util.List;
 
 @Service
 public class PatientService {
+
+
+    // Example of validation method:
+    public boolean isValidDate(String dateStr) {
+        try {
+            LocalDate.parse(dateStr);
+            return true;
+        } catch (DateTimeParseException e) {
+            return false;
+        }
+    }
+
+
+
+
 
     private PatientRepository patientRepository;
     private final BillingServiceGrpcClient billingServiceGrpcClient;
@@ -43,6 +63,21 @@ this.billingServiceGrpcClient = billingServiceGrpcClient;
 
 
     public PatientResponseDTO createpatient(PatientRequestDTO patientRequestDTO) {
+
+        try {
+            LocalDate date = LocalDate.parse(patientRequestDTO.getRegisteredDate());
+        } catch (DateTimeParseException e) {
+            // Return 400 Bad Request with a meaningful message to client
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid date format or value");
+        }
+        try {
+            LocalDate date = LocalDate.parse(patientRequestDTO.getDateOfBirth());
+        } catch (DateTimeParseException e) {
+            // Return 400 Bad Request with a meaningful message to client
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid date format or value");
+        }
+
+
         if (patientRepository.existsByEmail(patientRequestDTO.getEmail())) {
             throw new EmailAlreadyExitException("Email already exists : " + patientRequestDTO.getEmail());
         }

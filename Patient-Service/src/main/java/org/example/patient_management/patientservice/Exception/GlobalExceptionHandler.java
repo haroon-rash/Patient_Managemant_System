@@ -1,9 +1,12 @@
 package org.example.patient_management.patientservice.Exception;
 
-
+import com.fasterxml.jackson.databind.exc.InvalidFormatException;
+import jakarta.validation.ConstraintViolation;
+import jakarta.validation.ConstraintViolationException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -15,38 +18,67 @@ import java.util.Map;
 @ControllerAdvice
 public class GlobalExceptionHandler {
 
-    //Arguments validation Errors
+    // Handle Bean Validation errors (e.g. @NotBlank, @Email, etc.)
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<Map<String, String>> handleMethodArgumentNotValidException(MethodArgumentNotValidException ex) {
+    public ResponseEntity<Map<String, String>> handleValidationErrors(MethodArgumentNotValidException ex) {
         Map<String, String> errors = new HashMap<>();
-
-
-        ex.getBindingResult().getFieldErrors().forEach(error -> {
-            errors.put(error.getField(), error.getDefaultMessage());
-        });
-
+        ex.getBindingResult().getFieldErrors().forEach(error ->
+                errors.put(error.getField(), error.getDefaultMessage()));
         return ResponseEntity.badRequest().body(errors);
-
     }
 
-//Email Already Exist Handler
-    @ExceptionHandler(EmailAlreadyExitException.class)
-    public ResponseEntity<Map<String,String>> handleEmailAlreadyExitException(EmailAlreadyExitException ex) {
-        log.warn("Email already exists:  {}", ex.getMessage()); //TO Find Bug is Project
-
+    //  Handle validation groups using @Validated
+    @ExceptionHandler(ConstraintViolationException.class)
+    public ResponseEntity<Map<String, String>> handleConstraintViolations(ConstraintViolationException ex) {
         Map<String, String> errors = new HashMap<>();
-        errors.put("message", "Email already exists");
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errors);
-        //Patient Not Found HAndler
+        for (ConstraintViolation<?> violation : ex.getConstraintViolations()) {
+            String field = violation.getPropertyPath().toString();
+            errors.put(field, violation.getMessage());
+        }
+        return ResponseEntity.badRequest().body(errors);
     }
+
+    //  Handle existing email
+    @ExceptionHandler(EmailAlreadyExitException.class)
+    public ResponseEntity<Map<String, String>> handleEmailAlreadyExists(EmailAlreadyExitException ex) {
+        log.warn("Email already exists: {}", ex.getMessage());
+        Map<String, String> error = new HashMap<>();
+        error.put("message", "Email already exists");
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(error);
+    }
+
+    //  Handle patient not found
     @ExceptionHandler(PatientNotFoundException.class)
-    public ResponseEntity<Map<String,String>> handlePatientNotFoundException(PatientNotFoundException ex){
-        log.warn("Patient not found: {}",ex.getMessage());
-        Map<String,String> errors = new HashMap<>();
-        errors.put("message","Patient not found");
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errors);
-
+    public ResponseEntity<Map<String, String>> handlePatientNotFound(PatientNotFoundException ex) {
+        log.warn("Patient not found: {}", ex.getMessage());
+        Map<String, String> error = new HashMap<>();
+        error.put("message", "Patient not found");
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(error);
     }
 
+    //  Handle invalid JSON (date format, enum parsing, etc.)
+    @ExceptionHandler(HttpMessageNotReadableException.class)
+    public ResponseEntity<Map<String, String>> handleInvalidJson(HttpMessageNotReadableException ex) {
+        Map<String, String> error = new HashMap<>();
+        Throwable cause = ex.getCause();
 
+        if (cause instanceof InvalidFormatException ife && !ife.getPath().isEmpty()) {
+            String fieldName = ife.getPath().get(0).getFieldName();
+            String invalidValue = ife.getValue().toString();
+            error.put(fieldName, "Invalid value '" + invalidValue + "' for field '" + fieldName + "'. Expected format: yyyy-MM-dd");
+        } else {
+            error.put("message", "Malformed JSON or invalid input format");
+        }
+
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
+    }
+
+    //  Fallback for any unexpected exceptions
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity<Map<String, String>> handleGenericException(Exception ex) {
+        log.error("Unexpected error occurred: ", ex);
+        Map<String, String> error = new HashMap<>();
+        error.put("message", "An unexpected error occurred. Please contact support.");
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(error);
+    }
 }

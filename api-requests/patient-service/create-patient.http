@@ -3,12 +3,12 @@ POST http://localhost:4000/patient/createpatient
 Content-Type: application/json
 
 {
-  "name": "Ali Khan Billing Account",
-  "email": "aliKhan12_billing_Account_raza@example.com",
+  "name": "John Duo",
+  "email": "john@4663335gmail.com",
   "address": "123 Street, Lahore",
   "phone": "03001234567",
   "dateOfBirth": "1995-06-15",
-  "registeredDate": "2025-05-26"
+  "registeredDate": "2025-05-09"
 }
 
 
