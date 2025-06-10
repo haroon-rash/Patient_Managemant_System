@@ -26,7 +26,7 @@ and maintainable healthcare application.
 | Messaging        | Apache Kafka                |
 | Inter-Service    | gRPC (Protocol Buffers)     |
 | API Docs         | Swagger / OpenAPI           |
-| Containerization | Docker, Docker Compose      |
+| Containerization | Docker                      |
 | Code Reduction   | Lombok                      |
 | Security         | Spring Security + JWT (Upcoming) |
 
