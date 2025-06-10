@@ -11,25 +11,27 @@ and maintainable healthcare application.
 - Build production-level REST APIs with input validation and error handling
 - Prepare services for future integration with gRPC, Kafka, and containerized deployment
 
-## Technologies & Patterns Covered (So Far)
 
-- **Spring Boot** – Application configuration, layered architecture
-- **Spring Data JPA** – In-memory data persistence using H2
-- **DTO Pattern** – Separate request/response models
-- **Validation** – Field-level and global request validation using `@Valid`, `@NotNull`, `@Pattern`, etc.
-- **Exception Handling** – Custom exception classes, centralized exception handler
-- **Service and Repository Layers** – Clean separation of concerns with dependency injection
-- **Controller Testing** – Manual and mock-based endpoint testing
+---
 
-## Tech Stack
+## Technologies Used
 
-- Java 17
-- Spring Boot 3
-- Spring Data JPA
-- H2 Database
-- Jakarta Validation
-- Lombok
-- RESTful API design
+| Category         | Technology                  |
+|------------------|-----------------------------|
+| Language         | Java 17                     |
+| Framework        | Spring Boot 3               |
+| Data Access      | Spring Data JPA             |
+| Database         | H2 (in-memory)              |
+| Validation       | Jakarta Bean Validation     |
+| Messaging        | Apache Kafka                |
+| Inter-Service    | gRPC (Protocol Buffers)     |
+| API Docs         | Swagger / OpenAPI           |
+| Containerization | Docker, Docker Compose      |
+| Code Reduction   | Lombok                      |
+| Security         | Spring Security + JWT (Upcoming) |
+
+---
+
 
 - 
 ## Current Functionality
@@ -62,23 +64,94 @@ info:
 
 
 
-## Learning Outcomes (To This Stage)
+## Microservices Overview
 
-- Designed and implemented real-world layered architecture in a healthcare context
-- Built and tested secure and clean REST endpoints using DTOs
-- Created reusable exception handling patterns for request and business errors
-- Learned foundational practices for scaling towards microservices, gRPC, and Kafka integration
+### Patient Service
+- Handles full CRUD operations for patients.
+- Enforces unique email validation and field-level constraints.
+- Emits patient registration events via Kafka using Protobuf.
+- Invokes Billing Service through gRPC client call.
+- Containerized for portability and exposes documented REST endpoints.
+
+### Billing Service
+- Exposed as a gRPC server.
+- Listens and responds to patient registration requests.
+- Designed to be extendable for financial processing.
+- Fully Docker-integrated.
+
+### Analytics Service
+- Kafka consumer listening on the `patient-events` topic.
+- Processes and logs patient event data.
+- Future scope includes analytics dashboards or data lakes.
+- Docker-enabled for local and CI environments.
 
 ---
 
+## Kafka Integration
+
+- Kafka is used for decoupled, event-driven communication.
+- Patient Service publishes serialized Protobuf messages on `patient-events` topic.
+- Analytics Service consumes these events for processing/logging.
+- Kafka and Zookeeper are configured through Docker Compose for ease of use.
+
+---
+
+## gRPC Communication
+
+- Patient Service functions as the gRPC client.
+- Billing Service is implemented as the gRPC server.
+- Protobuf message contracts define the communication schema.
+- Ensures efficient binary communication for internal RPC-style requests.
+
+---
+
+## API Documentation
+
+- OpenAPI Specification (Swagger) is available.
+- YAML spec included in the documentation directory.
+- Easily testable using Swagger UI or Postman.
+
+
+
+## Testing Strategy
+
+- Unit tests written using JUnit and Mockito.
+- Manual testing supported via Postman and Swagger UI.
+- Integration tests planned with Docker Compose for end-to-end coverage.
+
+---
+
+## Learning Outcomes
+
+This project simulates industry-level backend development and covers:
+
+- Microservices design patterns and inter-service communication
+- Asynchronous workflows using Kafka
+- Efficient and scalable data handling with gRPC
+- REST API best practices and Swagger documentation
+- DevOps fundamentals via Docker and CI/CD planning
+
+---
+
+
+---
+
+
 ## Next Milestone (Planned)
 
-- Add update and delete endpoints with additional business rules  
-- Dockerize the patient service  
-- Start gRPC service-to-service communication  
-- Kafka integration for event publishing  
-- Implement token-based security with Spring Security and JWT
+- Implementation of Spring Security and JWT-based authentication.
+- Dedicated Auth microservice for secure token generation and validation.
+- Introduction of API Gateway for routing and load balancing.
+- Deployment setup using AWS (via LocalStack or native services).
+- Monitoring and alerting with Prometheus and Grafana.
+- CI/CD pipelines using GitHub Actions or Jenkins.
 
-> This project is being developed in iterative milestones,
-> following industry-standard backend practices including layered architecture,
-> DTO patterns, validation, and modular service design.
+---
+
+
+> This project is under active development and structured to grow into a fully secure and cloud-deployable enterprise system. Contributions, suggestions, and feedback are welcome.
+
+
+
+
+
