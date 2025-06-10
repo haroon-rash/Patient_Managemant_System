@@ -4,13 +4,17 @@ package org.example.patient_management.patientservice.Service;
 import org.example.patient_management.patientservice.DTO.PatientRequestDTO;
 import org.example.patient_management.patientservice.DTO.PatientResponseDTO;
 import org.example.patient_management.patientservice.Exception.EmailAlreadyExitException;
+import org.example.patient_management.patientservice.Exception.InvalidDateException;
 import org.example.patient_management.patientservice.Exception.PatientNotFoundException;
 import org.example.patient_management.patientservice.Grpc.BillingServiceGrpcClient;
+import org.example.patient_management.patientservice.Kafka.KafkaProducer;
 import org.example.patient_management.patientservice.Models.Patient;
 import org.example.patient_management.patientservice.Repository.PatientRepository;
 import org.example.patient_management.patientservice.mapper.PatientMapper;
 
+import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
+import java.time.format.ResolverStyle;
 import java.util.UUID;
 
 import org.springframework.http.HttpStatus;
@@ -25,14 +29,8 @@ public class PatientService {
 
 
     // Example of validation method:
-    public boolean isValidDate(String dateStr) {
-        try {
-            LocalDate.parse(dateStr);
-            return true;
-        } catch (DateTimeParseException e) {
-            return false;
-        }
-    }
+
+
 
 
 
@@ -40,11 +38,12 @@ public class PatientService {
 
     private PatientRepository patientRepository;
     private final BillingServiceGrpcClient billingServiceGrpcClient;
-
-    public PatientService(PatientRepository patientRepository, BillingServiceGrpcClient billingServiceGrpcClient) {
+private final KafkaProducer  kafkaProducer;
+    public PatientService(PatientRepository patientRepository, BillingServiceGrpcClient billingServiceGrpcClient, KafkaProducer kafkaProducer) {
 
         this.patientRepository = patientRepository;
 this.billingServiceGrpcClient = billingServiceGrpcClient;
+this.kafkaProducer = kafkaProducer;
     }
 
 
@@ -64,19 +63,6 @@ this.billingServiceGrpcClient = billingServiceGrpcClient;
 
     public PatientResponseDTO createpatient(PatientRequestDTO patientRequestDTO) {
 
-        try {
-            LocalDate date = LocalDate.parse(patientRequestDTO.getRegisteredDate());
-        } catch (DateTimeParseException e) {
-            // Return 400 Bad Request with a meaningful message to client
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid date format or value");
-        }
-        try {
-            LocalDate date = LocalDate.parse(patientRequestDTO.getDateOfBirth());
-        } catch (DateTimeParseException e) {
-            // Return 400 Bad Request with a meaningful message to client
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid date format or value");
-        }
-
 
         if (patientRepository.existsByEmail(patientRequestDTO.getEmail())) {
             throw new EmailAlreadyExitException("Email already exists : " + patientRequestDTO.getEmail());
@@ -84,8 +70,12 @@ this.billingServiceGrpcClient = billingServiceGrpcClient;
 
         Patient newPatient = patientRepository.save(PatientMapper.mapToPatient(patientRequestDTO));
 
-
+//send messages via GRPC
 billingServiceGrpcClient.createBillingAccount(newPatient.getId().toString(),newPatient.getName(),newPatient.getEmail());
+
+//send messages Via Kafka
+kafkaProducer.sendEvent(newPatient);
+
 
         return PatientMapper.mapToPatientResponseDTO(newPatient);
     }

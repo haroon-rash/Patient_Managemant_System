@@ -19,16 +19,16 @@ import java.util.Map;
 public class GlobalExceptionHandler {
 
     // Handle Bean Validation errors (e.g. @NotBlank, @Email, etc.)
-    @ExceptionHandler(MethodArgumentNotValidException.class)
+    /*@ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<Map<String, String>> handleValidationErrors(MethodArgumentNotValidException ex) {
         Map<String, String> errors = new HashMap<>();
         ex.getBindingResult().getFieldErrors().forEach(error ->
                 errors.put(error.getField(), error.getDefaultMessage()));
         return ResponseEntity.badRequest().body(errors);
     }
-
+*/
     //  Handle validation groups using @Validated
-    @ExceptionHandler(ConstraintViolationException.class)
+/*    @ExceptionHandler(ConstraintViolationException.class)
     public ResponseEntity<Map<String, String>> handleConstraintViolations(ConstraintViolationException ex) {
         Map<String, String> errors = new HashMap<>();
         for (ConstraintViolation<?> violation : ex.getConstraintViolations()) {
@@ -36,7 +36,7 @@ public class GlobalExceptionHandler {
             errors.put(field, violation.getMessage());
         }
         return ResponseEntity.badRequest().body(errors);
-    }
+    }*/
 
     //  Handle existing email
     @ExceptionHandler(EmailAlreadyExitException.class)
@@ -57,28 +57,15 @@ public class GlobalExceptionHandler {
     }
 
     //  Handle invalid JSON (date format, enum parsing, etc.)
-    @ExceptionHandler(HttpMessageNotReadableException.class)
-    public ResponseEntity<Map<String, String>> handleInvalidJson(HttpMessageNotReadableException ex) {
+    @ExceptionHandler(InvalidDateException.class)
+    public ResponseEntity<Map<String, String>> handleInvalidDateException(InvalidDateException ex) {
+        log.warn("Invalid date Found: {}", ex.getMessage());
         Map<String, String> error = new HashMap<>();
-        Throwable cause = ex.getCause();
-
-        if (cause instanceof InvalidFormatException ife && !ife.getPath().isEmpty()) {
-            String fieldName = ife.getPath().get(0).getFieldName();
-            String invalidValue = ife.getValue().toString();
-            error.put(fieldName, "Invalid value '" + invalidValue + "' for field '" + fieldName + "'. Expected format: yyyy-MM-dd");
-        } else {
-            error.put("message", "Malformed JSON or invalid input format");
-        }
-
+        error.put("message", ex.getMessage());
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
     }
-
     //  Fallback for any unexpected exceptions
-    @ExceptionHandler(Exception.class)
-    public ResponseEntity<Map<String, String>> handleGenericException(Exception ex) {
-        log.error("Unexpected error occurred: ", ex);
-        Map<String, String> error = new HashMap<>();
-        error.put("message", "An unexpected error occurred. Please contact support.");
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(error);
-    }
+
+
+
 }

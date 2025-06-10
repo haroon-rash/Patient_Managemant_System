@@ -111,6 +111,16 @@
             <artifactId>protobuf-java</artifactId>
             <version>4.29.1</version>
         </dependency>
+        <dependency>
+            <groupId>org.springframework.kafka</groupId>
+            <artifactId>spring-kafka</artifactId>
+            <version>3.3.0</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.kafka</groupId>
+            <artifactId>spring-kafka-test</artifactId>
+            <scope>test</scope>
+        </dependency>
 
 
     </dependencies>
@@ -145,13 +155,13 @@
                 </configuration>
             </plugin>
 
-            <!-- ✅ Spring Boot plugin -->
+            <!-- Spring Boot plugin -->
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
             </plugin>
 
-            <!-- ✅ PROTO plugin (leave as-is) -->
+            <!-- PROTO plugin (leave as-is) -->
             <plugin>
                 <groupId>org.xolstice.maven.plugins</groupId>
                 <artifactId>protobuf-maven-plugin</artifactId>
