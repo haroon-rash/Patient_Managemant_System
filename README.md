@@ -34,14 +34,6 @@ and maintainable healthcare application.
 
 
 - 
-## Current Functionality
-
-- **Domain-Driven Entity Design**
-  - `Patient` entity includes:
-    - `id` (UUID, auto-generated)
-    - `name`, `email`, `address`, `phone` (optional), `dateOfBirth`, `registeredDate`
-  - Email is enforced to be unique via `@Column(unique = true)`
-- Robust validation error messages with meaningful business logic exceptions
 
 
 ## 📄 API Documentation (Swagger)
