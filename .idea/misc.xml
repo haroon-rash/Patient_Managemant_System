@@ -8,11 +8,15 @@
         <option value="$PROJECT_DIR$/Patient-Service/pom.xml" />
         <option value="$PROJECT_DIR$/Billing-Srvice/pom.xml" />
         <option value="$PROJECT_DIR$/Billing-Services/pom.xml" />
+        <option value="$PROJECT_DIR$/Analytics-Service/pom.xml" />
+        <option value="$PROJECT_DIR$/demo/pom.xml" />
+        <option value="$PROJECT_DIR$/Api-Gateway/pom.xml" />
       </list>
     </option>
     <option name="ignoredFiles">
       <set>
         <option value="$PROJECT_DIR$/../../Patient_Management_System/Patient_Services/pom.xml" />
+        <option value="$PROJECT_DIR$/demo/pom.xml" />
       </set>
     </option>
   </component>
