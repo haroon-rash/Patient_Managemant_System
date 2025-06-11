@@ -1,4 +1,7 @@
 ### GET Patients
-GET http://localhost:4000/patient/getpatient
+###GET http://localhost:4000/patient/getpatient  #No Longer due to Api Gatewy
+GET http://localhost:4004/api/patient/getpatient
 
 ###
+
+
