@@ -97,8 +97,12 @@ patient.setName(patientRequestDTO.getName());
     }
 
 
-    public void deletePatient(UUID id) {
+    public boolean deletePatient(UUID id) {
+        if(patientRepository.existsById(id)){
         patientRepository.deleteById(id);
+        return true;
+    }
+      return false;
     }
 
 }
