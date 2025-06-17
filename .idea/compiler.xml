@@ -20,6 +20,7 @@
         <module name="demo" />
         <module name="Api-Gateway" />
         <module name="Billing-Services" />
+        <module name="Auth-Service" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
@@ -32,6 +33,7 @@
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
       <module name="Analytics-Service" options="-parameters" />
       <module name="Api-Gateway" options="-parameters" />
+      <module name="Auth-Service" options="-parameters" />
       <module name="Billing-Service" options="-parameters" />
       <module name="Billing-Services" options="-parameters" />
       <module name="Patient-Service" options="-parameters" />
