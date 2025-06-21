@@ -1,14 +1,14 @@
 package org.example.authservice.Controller;
 
+import io.swagger.v3.oas.annotations.Operation;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.coyote.Response;
 import org.example.authservice.DTO.LoginRequestDTO;
 import org.example.authservice.DTO.LoginResponseDTO;
 import org.example.authservice.Service.AuthService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.Optional;
 
@@ -38,6 +38,17 @@ public ResponseEntity<?>login(@RequestBody LoginRequestDTO loginRequestDTO) {
 
 
 
+}
+
+
+@Operation(summary ="Validate Token")
+    @GetMapping("/validate")
+    public ResponseEntity<?> validateToken(@RequestHeader("Authorization") String authHeader) {
+
+        if(authHeader==null||!authHeader.startsWith("Bearer ")){
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+        return authService.validateToken(authHeader.substring(7))? ResponseEntity.ok().build():ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
 }
 
 

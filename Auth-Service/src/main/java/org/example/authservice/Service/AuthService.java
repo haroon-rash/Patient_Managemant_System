@@ -1,5 +1,6 @@
 package org.example.authservice.Service;
 
+import io.jsonwebtoken.JwtException;
 import lombok.extern.slf4j.Slf4j;
 import org.example.authservice.DTO.LoginRequestDTO;
 
@@ -32,6 +33,18 @@ log.info("Authenticating {}", loginRequestDTO);
 
 
     }
+
+
+    public boolean validateToken(String token) {
+        try{
+            jwtUtil.validateToken(token);
+            return true;
+        }catch (JwtException e){
+            return false;
+        }
+
+    }
+
 
 
 }
