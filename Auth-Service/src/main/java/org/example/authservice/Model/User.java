@@ -8,6 +8,8 @@ import java.util.UUID;
 @Data
 @Entity
 @Table(name="Users")
+
+//user class
 public class User {
 
     @Id
