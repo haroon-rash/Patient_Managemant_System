@@ -43,8 +43,9 @@ public ResponseEntity<?>login(@RequestBody LoginRequestDTO loginRequestDTO) {
 
 @Operation(summary ="Validate Token")
     @GetMapping("/validate")
-    public ResponseEntity<?> validateToken(@RequestHeader("Authorization") String authHeader) {
-
+    public ResponseEntity<?> validateToken(@RequestHeader(value = "Authorization", required = false)
+                                           String authHeader) {
+    log.info("Auth Header: {}", authHeader);
         if(authHeader==null||!authHeader.startsWith("Bearer ")){
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
