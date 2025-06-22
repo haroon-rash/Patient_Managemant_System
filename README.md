@@ -123,6 +123,9 @@ This project simulates industry-level backend development and covers:
 - REST API best practices and Swagger documentation
 - DevOps fundamentals via Docker and CI/CD planning
 
+- Implementation of Spring Security and JWT-based authentication.
+- Dedicated Auth microservice for secure token generation and validation.
+- Introduction of API Gateway for routing and load balancing.
 ---
 
 
@@ -131,9 +134,7 @@ This project simulates industry-level backend development and covers:
 
 ## Next Milestone (Planned)
 
-- Implementation of Spring Security and JWT-based authentication.
-- Dedicated Auth microservice for secure token generation and validation.
-- Introduction of API Gateway for routing and load balancing.
+
 - Deployment setup using AWS (via LocalStack or native services).
 - Monitoring and alerting with Prometheus and Grafana.
 - CI/CD pipelines using GitHub Actions or Jenkins.
