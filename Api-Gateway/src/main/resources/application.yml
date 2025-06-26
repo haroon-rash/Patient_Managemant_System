@@ -1,5 +1,5 @@
 server:
-  port: 4004
+  port: 4004  #Api_Gateway port Listen on 4004
 
 spring:
   cloud:
@@ -7,6 +7,15 @@ spring:
       server:
         webflux:
           routes:
+
+ #Client Request to Api Gateway -> localhost:4004/auth/login  then goes forward to  localhost:4005/login
+            - id: patient-service-route
+              uri: http://Auth-Service:4005/
+              predicates:
+                - Path=/auth/**
+              filters:
+                - StripPrefix=1
+
             - id: patient-service-route
               uri: http://Patient-Service:4000/
               predicates:
