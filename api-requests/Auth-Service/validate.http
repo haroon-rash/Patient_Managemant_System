@@ -1,5 +1,5 @@
 ### GET VALIDATE REQUEST
 
-GET http://localhost:4005/validate
-
-Authorization:Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ0ZXN0dXNlckB0ZXN0LmNvbSIsInJvbGUiOiJBRE1JTiIsImlhdCI6MTc1MDUzMjc0NSwiZXhwIjoxNzUwNTY4NzQ1fQ.Lg_SZvAqqwJ5dfpI4vUc_alI7zZfVz-xq-yYXXUoTcQ
+### BY  API GATEWAY   
+GET http://localhost:4004/auth/login
+Authorization: Bearer {{token}}
