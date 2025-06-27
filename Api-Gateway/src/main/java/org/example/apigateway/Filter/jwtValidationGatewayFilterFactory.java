@@ -18,6 +18,8 @@ public class jwtValidationGatewayFilterFactory extends AbstractGatewayFilterFact
     @Override
     public GatewayFilter apply(Object config) {
 
+
+        
     }
 
 }
