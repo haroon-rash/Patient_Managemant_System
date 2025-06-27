@@ -19,7 +19,8 @@ public class jwtValidationGatewayFilterFactory extends AbstractGatewayFilterFact
     public GatewayFilter apply(Object config) {
 
 
-        
+        return ((exchange, chain) ->
+                String)
     }
 
 }
