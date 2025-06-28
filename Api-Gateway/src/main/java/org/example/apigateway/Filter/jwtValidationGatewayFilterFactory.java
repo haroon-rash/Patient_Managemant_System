@@ -3,6 +3,9 @@ package org.example.apigateway.Filter;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cloud.gateway.filter.GatewayFilter;
 import org.springframework.cloud.gateway.filter.factory.AbstractGatewayFilterFactory;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
 
@@ -19,8 +22,14 @@ public class jwtValidationGatewayFilterFactory extends AbstractGatewayFilterFact
     public GatewayFilter apply(Object config) {
 
 
-        return ((exchange, chain) ->
-                String)
+        return ((exchange, chain) ->{
+                String token = exchange.getRequest().getHeaders().getFirst("Authorization");
+             if(token == null || !token.startsWith("Bearer ")) {
+                 exchange.getResponse().setStatusCode(HttpStatus.UNAUTHORIZED);
+                 return exchange.getResponse().setComplete();
+             }
+        return webClient.get().uri("/validate").header(HttpHeaders.AUTHORIZATION).retrieve().toBodilessEntity().then(chain.filter(exchange));
+        });
     }
 
 }
