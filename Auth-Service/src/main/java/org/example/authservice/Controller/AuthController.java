@@ -1,6 +1,7 @@
 package org.example.authservice.Controller;
 
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.coyote.Response;
 import org.example.authservice.DTO.LoginRequestDTO;
@@ -14,6 +15,7 @@ import java.util.Optional;
 
 @Slf4j
 @RestController
+@Tag(name = "Auth Controller",description = "Api use for Authorization END POiNT")
 public class AuthController {
 
     private final AuthService authService;
@@ -21,7 +23,7 @@ public class AuthController {
     public AuthController(AuthService authService) {
         this.authService = authService;
     }
-
+@Operation(summary = "Login to Service ")
 @PostMapping("/login")
 public ResponseEntity<?>login(@RequestBody LoginRequestDTO loginRequestDTO) {
 
