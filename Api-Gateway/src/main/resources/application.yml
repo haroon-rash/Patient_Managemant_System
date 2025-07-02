@@ -32,3 +32,13 @@ spring:
               filters:
                 - RewritePath=/api-docs/patients, /v3/api-docs
               # Swagger -> http://localhost:4004/api-docs/patients -> rewritten to /v3/api-docs
+
+  # Api Docs for Auth Service
+
+            - id: api-docs-auth-route
+              uri: http://Auth-Service:4005
+              predicates:
+                - Path=/api-docs/auth    # This is the Path for Documentation
+              filters:
+                - RewritePath=/api-docs/auth, /v3/api-docs
+              # Swagger -> http://localhost:4005/api-docs/auth -> rewritten to /v3/api-docs
