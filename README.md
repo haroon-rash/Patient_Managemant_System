@@ -1,4 +1,4 @@
-# Patient Management Microservices System (In Progress)
+# Patient Management Microservices System 
 
 This project is a professional, real-world microservices-based Patient Management System built using Spring Boot. 
 Currently focused on the core backend architecture for the **Patient Service**,
@@ -142,7 +142,7 @@ This project simulates industry-level backend development and covers:
 ---
 
 
-> This project is under active development and structured to grow into a fully secure and cloud-deployable enterprise system. Contributions, suggestions, and feedback are welcome.
+> This project is  active development and structured to grow into a fully secure and cloud-deployable enterprise system. Contributions, suggestions, and feedback are welcome.
 
 
 
